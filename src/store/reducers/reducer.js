@@ -1,5 +1,4 @@
-import {QuestionStates} from './../../shared/utility';
-import shuffle from 'shuffle-array';
+import {QuestionStates, getOptions} from './../../shared/utility';
 
 const initialState= {
   countries: [], 
@@ -7,17 +6,6 @@ const initialState= {
   correctOption: {name: ''}, 
   flag: undefined,
   questionState: undefined  
-};
-
-const getOptions = (correctOption, countries) => {
-  let options = [correctOption];
-  while (options.length < 4) {
-    const optionIndex = Math.floor(Math.random() * countries.length);
-    if (options.indexOf(countries[optionIndex].name) === -1) {
-      options.push({ name: countries[optionIndex].name });
-    }
-  }
-  return shuffle(options);
 };
 
 const reducer = (state = initialState, action) => {

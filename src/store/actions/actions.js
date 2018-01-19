@@ -1,17 +1,5 @@
 import axios from 'axios';
-import shuffle from 'shuffle-array';
-import {QuestionStates} from './../../shared/utility';
-
-const getOptions = (correctOption, countries) => {
-  let options = [correctOption];
-  while (options.length < 4) {
-    const optionIndex = Math.floor(Math.random() * countries.length);
-    if (options.indexOf(countries[optionIndex].name) === -1) {
-      options.push({ name: countries[optionIndex].name });
-    }
-  }
-  return shuffle(options);
-};
+import {QuestionStates, getOptions} from './../../shared/utility';
 
 export const onGuess = ({name}) => {
   return {
