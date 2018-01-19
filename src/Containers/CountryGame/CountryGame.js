@@ -1,37 +1,35 @@
 import React, { Component } from 'react';
-// import FlagQuestion from './FlagQuestion.js';
+import FlagQuestion from './../FlagQuestion/FlagQuestion.js';
 import axios from 'axios';
 import shuffle from 'shuffle-array';
-
-const QuestionStates = {
-  QUESTION: 1,
-  ANSWER_WRONG: 2,
-  ANSWER_CORRECT: 3
-};
+import {QuestionStates} from './../../shared/utility';
 
 class CountryGame extends Component {
   state = {
-    countries: [], //List of all countries from the AJAX
-    options: [], //Array of 4 country names
-    correctOption: undefined, //The index # of array
-    questionState: undefined,
+    countries: [], 
+    options: [], 
+    correctOption: {name: ''}, 
+    flag: undefined,
+    questionState: undefined
   }
   componentDidMount() {
     axios.get("https://restcountries.eu/rest/v2/all")
       .then(({ data: countries }) => {
         const correctOptionIndex = Math.floor(Math.random() * countries.length);
+        const flag = countries[correctOptionIndex].flag;
         const correctOption = { name: countries[correctOptionIndex].name };
         const options = this.getOptions(correctOption, countries);
         this.setState({
           countries,
           options,
           correctOption,
+          flag,
           questionState: QuestionStates.QUESTION
         });
       })
   }
   getOptions = (correctOption, countries) => {
-    let options = [{ name: correctOption }];
+    let options = [correctOption];
     while (options.length < 4) {
       const optionIndex = Math.floor(Math.random() * countries.length);
       if (options.indexOf(countries[optionIndex].name) === -1) {
@@ -47,9 +45,37 @@ class CountryGame extends Component {
       QuestionStates.ANSWER_WRONG;
     this.setState({questionState});
   }
+  nextQuestion = () => {
+    const {countries} = this.state;
+    const correctOptionIndex = Math.floor(Math.random() * countries.length);
+    const flag = countries[correctOptionIndex].flag;
+    const correctOption = { name: countries[correctOptionIndex].name };
+    const options = this.getOptions(correctOption, countries);
+    this.setState({
+      options,
+      correctOption,
+      flag,
+      questionState: QuestionStates.QUESTION
+    });
+  }
   render() {
+    const {
+      options, 
+      correctOption, 
+      flag, 
+      questionState
+    } = this.state;
     return (
-      <p>Country game component</p>
+      <div style={{ marginTop: '15px' }}>
+        <FlagQuestion 
+          options={options}
+          correctOption={correctOption}
+          flag={flag}
+          questionState={questionState}
+          onGuess={this.onGuess}
+          nextQuestion={this.nextQuestion}
+        />
+      </div>
     );
   }
 };
