@@ -9,15 +9,23 @@ class CountryGame extends Component {
     this.props.setCountries();
   }
   render() {
+    const {
+      options,
+      correctOption,
+      flag,
+      questionState,
+      onGuess,
+      nextQuestion
+    } = this.props;
     return (
       <div style={{ marginTop: '15px' }}>
         <FlagQuestion 
-          options={this.props.options}
-          correctOption={this.props.correctOption}
-          flag={this.props.flag}
-          questionState={this.props.questionState}
-          onGuess={this.props.onGuess}
-          nextQuestion={this.props.nextQuestion}
+          options={options}
+          correctOption={correctOption}
+          flag={flag}
+          questionState={questionState}
+          onGuess={onGuess}
+          nextQuestion={nextQuestion}
         />
       </div>
     );
