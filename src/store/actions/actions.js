@@ -1,5 +1,4 @@
 import axios from 'axios';
-import {QuestionStates, getOptions} from './../../shared/utility';
 
 export const onGuess = ({name}) => {
   return {
@@ -15,17 +14,9 @@ export const nextQuestion = () => {
 };
 
 export const setCountries = (countries) => {
-  const correctOptionIndex = Math.floor(Math.random() * countries.length);
-  const flag = countries[correctOptionIndex].flag;
-  const correctOption = { name: countries[correctOptionIndex].name };
-  const options = getOptions(correctOption, countries);
   return {
     type: "SET_COUNTRIES",
-    countries,
-    options,
-    correctOption,
-    flag,
-    questionState: QuestionStates.QUESTION 
+    countries
   };
 };
 
