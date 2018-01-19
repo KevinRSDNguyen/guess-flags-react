@@ -1,83 +1,44 @@
 import React, { Component } from 'react';
+import {connect} from 'react-redux';
 import FlagQuestion from './../FlagQuestion/FlagQuestion.js';
-import axios from 'axios';
-import shuffle from 'shuffle-array';
-import {QuestionStates} from './../../shared/utility';
+
+import {fetchCountries, onGuess, nextQuestion} from './../../store/actions/actions';
 
 class CountryGame extends Component {
-  state = {
-    countries: [], 
-    options: [], 
-    correctOption: {name: ''}, 
-    flag: undefined,
-    questionState: undefined
-  }
   componentDidMount() {
-    axios.get("https://restcountries.eu/rest/v2/all")
-      .then(({ data: countries }) => {
-        const correctOptionIndex = Math.floor(Math.random() * countries.length);
-        const flag = countries[correctOptionIndex].flag;
-        const correctOption = { name: countries[correctOptionIndex].name };
-        const options = this.getOptions(correctOption, countries);
-        this.setState({
-          countries,
-          options,
-          correctOption,
-          flag,
-          questionState: QuestionStates.QUESTION
-        });
-      })
-  }
-  getOptions = (correctOption, countries) => {
-    let options = [correctOption];
-    while (options.length < 4) {
-      const optionIndex = Math.floor(Math.random() * countries.length);
-      if (options.indexOf(countries[optionIndex].name) === -1) {
-        options.push({ name: countries[optionIndex].name });
-      }
-    }
-    return shuffle(options);
-  }
-  onGuess = ({name}) => {
-    const {correctOption} = this.state;
-    const questionState = name === correctOption.name ?
-      QuestionStates.ANSWER_CORRECT : 
-      QuestionStates.ANSWER_WRONG;
-    this.setState({questionState});
-  }
-  nextQuestion = () => {
-    const {countries} = this.state;
-    const correctOptionIndex = Math.floor(Math.random() * countries.length);
-    const flag = countries[correctOptionIndex].flag;
-    const correctOption = { name: countries[correctOptionIndex].name };
-    const options = this.getOptions(correctOption, countries);
-    this.setState({
-      options,
-      correctOption,
-      flag,
-      questionState: QuestionStates.QUESTION
-    });
+    this.props.setCountries();
   }
   render() {
-    const {
-      options, 
-      correctOption, 
-      flag, 
-      questionState
-    } = this.state;
     return (
       <div style={{ marginTop: '15px' }}>
         <FlagQuestion 
-          options={options}
-          correctOption={correctOption}
-          flag={flag}
-          questionState={questionState}
-          onGuess={this.onGuess}
-          nextQuestion={this.nextQuestion}
+          options={this.props.options}
+          correctOption={this.props.correctOption}
+          flag={this.props.flag}
+          questionState={this.props.questionState}
+          onGuess={this.props.onGuess}
+          nextQuestion={this.props.nextQuestion}
         />
       </div>
     );
   }
 };
 
-export default CountryGame;
+const mapStateToProps = state => {
+  return {
+      options: state.options,
+      correctOption: state.correctOption,
+      flag: state.flag,
+      questionState: state.questionState
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    setCountries: () => dispatch(fetchCountries()),
+    onGuess: (obj) => dispatch(onGuess(obj)) ,
+    nextQuestion: () => dispatch(nextQuestion())
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(CountryGame);
