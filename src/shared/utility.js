@@ -11,7 +11,7 @@ export const getOptions = (correctOption, countries) => {
   while (options.length < 4) {
     const optionIndex = Math.floor(Math.random() * countries.length);
     if (options.indexOf(countries[optionIndex].name) === -1) {
-      options.push({ name: countries[optionIndex].name });
+      options.push(countries[optionIndex].name);
     }
   }
   return shuffle(options);

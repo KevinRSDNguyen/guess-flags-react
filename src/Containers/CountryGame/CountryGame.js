@@ -44,7 +44,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     setCountries: () => dispatch(fetchCountries()),
-    onGuess: (obj) => dispatch(onGuess(obj)) ,
+    onGuess: (name) => dispatch(onGuess(name)) ,
     nextQuestion: () => dispatch(nextQuestion())
   };
 };

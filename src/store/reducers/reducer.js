@@ -11,7 +11,7 @@ const initialState= {
 const setCountries = (countries, state) => {
   const correctOptionIndex = Math.floor(Math.random() * countries.length);
   const flag = countries[correctOptionIndex].flag;
-  const correctOption = { name: countries[correctOptionIndex].name };
+  const correctOption = countries[correctOptionIndex].name;
   const options = getOptions(correctOption, countries);
   return {
     ...state,
@@ -26,7 +26,7 @@ const setCountries = (countries, state) => {
 const onGuess = (name, state) => {
   const prevState = {...state};
   const {correctOption} = prevState;
-  const questionState = name === correctOption.name ?
+  const questionState = name === correctOption ?
     QuestionStates.ANSWER_CORRECT :
     QuestionStates.ANSWER_WRONG;
   return {
@@ -40,7 +40,7 @@ const nextQuestion = (state) => {
   const {countries} = prevState;
   const correctOptionIndex = Math.floor(Math.random() * countries.length);
   const flag = countries[correctOptionIndex].flag;
-  const correctOption = { name: countries[correctOptionIndex].name };
+  const correctOption = countries[correctOptionIndex].name;
   const options = getOptions(correctOption, countries);
   return {
     ...state,

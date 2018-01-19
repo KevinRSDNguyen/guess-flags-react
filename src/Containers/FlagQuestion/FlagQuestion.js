@@ -6,11 +6,11 @@ import './FlagQuestion.css';
 
 class FlagQuestion extends Component {
   state = {
-    userChoice: {name: ''},
+    userChoice: '',
   }
   handleChange = (e) => {
     this.setState({
-      userChoice: {name: e.target.value}
+      userChoice: e.target.value
     });
   }
   handleSubmit = (e) => {
@@ -28,8 +28,8 @@ class FlagQuestion extends Component {
     const {userChoice} = this.state;
     let opts = options.map(opt => {
       return {
-        ...opt,
-        checked: userChoice.name === opt.name
+        name: opt,
+        checked: userChoice === opt
       }
     });
     const output = questionState === QuestionStates.QUESTION ?

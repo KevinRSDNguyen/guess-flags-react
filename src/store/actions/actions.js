@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export const onGuess = ({name}) => {
+export const onGuess = (name) => {
   return {
     type: "ON_GUESS",
     name
